@@ -1,26 +1,66 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from 'react'
+import { connect } from 'react-redux'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import InputBox from './modules/todos/components/InputBox'
+import AddTodoButton from './modules/todos/components/AddTodoButton'
+import TodosList from './modules/todos/containers/TodosList'
+
+import { addTodo } from './modules/todos/actions'
+
+class App extends React.Component {
+  constructor (props) {
+    super(props)
+    this.state = {
+      inputValue: 'test'
+    }
+  }
+
+  onTodoChange (value) {
+    console.log(value)
+
+    this.setState((state, props) => {
+      return { inputValue: value }
+    })
+  }
+
+  handleAddTodo = async () => {
+    // this.setState(state => ({
+    //   todos: [state.inputValue, ...state.todos],
+    //   inputValue: ''
+    // }))
+
+    // send action
+    this.props.addTodo(this.state.inputValue)
+  }
+
+  render() {
+    const { inputValue } = this.state
+    const { todos } = this.props
+
+    return (
+      <div className="App">
+        <InputBox
+          value={inputValue}
+          onChange={this.onTodoChange.bind(this)}
+        />
+
+        <AddTodoButton
+          handleOnClick={this.handleAddTodo.bind(this)}
+        />
+
+        <TodosList todos={todos} />
+      </div>
+    )
+  }
 }
 
-export default App;
+const mapStateToProps = state => ({
+  todos: state.todos.todos
+})
+
+const enhance = connect(
+  mapStateToProps,
+  { addTodo }
+)
+
+export default enhance(App)
