@@ -1,3 +1,5 @@
+Sample teaching project
+
 To run:
 
 ```
@@ -14,4 +16,9 @@ Run puppeteer
 
 ```
 export PUP_TARGET_URL={{url to sign in}} node puptest
+```
+
+Eg(wont work)
+```
+export PUP_TARGET_URL=https://google.com node puptest
 ```
